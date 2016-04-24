@@ -1,5 +1,6 @@
 module Humanise (..) where
 
+import Regex as Regex
 import Html exposing (Html)
 import Html.Attributes exposing (..)
 import Html.Events as Events
@@ -7,8 +8,9 @@ import Json.Decode as Json
 
 
 convert : String -> String
-convert regex =
-    regex ++ "blah"
+convert entry =
+    entry
+        |> Regex.replace Regex.All (Regex.regex "[aeiou]") (\_ -> "")
 
 
 --- MODEL
@@ -36,7 +38,7 @@ update action model =
     case action of
         Update regex ->
             { model | 
-                human = "Matches a " ++ convert regex,
+                human = "Matches in " ++ convert regex,
                 regex = regex
             }
         
