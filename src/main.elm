@@ -40,8 +40,7 @@ view : Signal.Address Action -> AppModel -> Html
 view address model =
     Html.div
         []
-        [ Humanise.view (Signal.forwardTo address HumaniseAction) model.humaniseModel
-        ]
+        [ Humanise.view (Signal.forwardTo address HumaniseAction) model.humaniseModel ]
             
 main : Signal.Signal Html
 main =

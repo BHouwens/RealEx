@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Experiments in humane regular expressions",
   "main": "elm.js",
-  "scripts": {},
+  "scripts": {
+    "start": "webpack-dev-server --port 3000"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BHouwens/RealEx.git"

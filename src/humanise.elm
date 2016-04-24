@@ -35,7 +35,10 @@ update : Action -> Model -> Model
 update action model =
     case action of
         Update regex ->
-            { model | human = "Matches a " ++ convert regex }
+            { model | 
+                human = "Matches a " ++ convert regex,
+                regex = regex
+            }
         
         NoOp ->
             model
