@@ -22,14 +22,10 @@ module.exports = {
         ]
       },
       {
-        test:    /\.html$/,
+        test: /\.js$/,
         exclude: /node_modules/,
-        loader:  'file?name=[name].[ext]',
-      },
-      {
-        test:    /\.elm$/,
-        exclude: [/elm-stuff/, /node_modules/],
-        loader:  'elm-webpack',
+        loader: 'babel',
+        query: { presets: [ 'es2015', 'react' ] }
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
