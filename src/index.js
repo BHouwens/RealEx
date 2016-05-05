@@ -1,13 +1,25 @@
 import React from 'react';
-import { render } from 'react-dom';
-import { Regex } from './components';
+import { render as renderToDom } from 'react-dom';
+
+/*---- Components ----*/
+import { RegexInput } from './components/regexInput';
+import { RegexOutput } from './components/regexOutput';
 
 const dummyRegex = [
     {text: '[0-9]'},
     {text: 'ab'}
 ];
 
-render(
-    <Regex chunks={dummyRegex}/>,
-    document.getElementById('app')
+const App = () => {
+    return (
+      <div className="container">
+        <RegexInput />
+        <RegexOutput chunks={dummyRegex} />
+      </div>  
+    );
+}
+
+renderToDom(
+    <App />,
+    document.querySelector('#app')
 );
