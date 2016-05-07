@@ -2,21 +2,29 @@ import React from 'react';
 import { render as renderToDom } from 'react-dom';
 
 /*---- Components ----*/
-import { RegexInput } from './components/regexInput';
+import { RegexInputList } from './components/regexInputList';
 import { RegexOutput } from './components/regexOutput';
 
-const dummyRegex = [
-    {text: '[0-9]'},
-    {text: 'ab'}
-];
+class App extends React.Component {
+    constructor(props) {
+        super(props);
 
-const App = () => {
-    return (
-      <div className="container">
-        <RegexInput />
-        <RegexOutput chunks={dummyRegex} />
-      </div>  
-    );
+        this.state = {
+            dummyRegex: [
+                { id: 0, text: '[0-9]' },
+                { id: 1, text: 'ab' }
+            ]
+        }
+    }
+
+    render() {
+        return (
+            <div className="container">
+                <RegexInputList inputs={this.state.dummyRegex} />
+                <RegexOutput chunks={this.state.dummyRegex} />
+            </div>
+        );
+    }
 }
 
 renderToDom(

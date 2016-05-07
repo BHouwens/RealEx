@@ -4,7 +4,7 @@ function concatChunks(chunks){
     return chunks.map(chunk => chunk.text).join('');
 }
 
-export function RegexOutput(props){
+export const RegexOutput = (props) => {
     let {chunks} = props;
     
     return (
