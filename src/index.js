@@ -3,16 +3,16 @@ import { render as renderToDom } from 'react-dom';
 
 /*---- Components ----*/
 import { RegexInputList } from './components/regexInputList';
-import { RegexOutput } from './components/regexOutput';
+import { TranslatedRegex } from './components/translatedRegex';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            dummyRegex: [
-                { id: 0, text: '[0-9]' },
-                { id: 1, text: 'ab' }
+            chunks: [
+                { id: 0, text: 'test' },
+                { id: 1, text: 'another' }
             ]
         }
     }
@@ -20,8 +20,10 @@ class App extends React.Component {
     render() {
         return (
             <div className="container">
-                <RegexInputList inputs={this.state.dummyRegex} />
-                <RegexOutput chunks={this.state.dummyRegex} />
+                <RegexInputList 
+                    changeChunks={ inputs => this.setState({ chunks: inputs })}
+                    inputs={this.state.chunks} />
+                <TranslatedRegex chunks={this.state.chunks} />
             </div>
         );
     }

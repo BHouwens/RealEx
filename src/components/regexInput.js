@@ -4,12 +4,17 @@ export class RegexInput extends React.Component {
     constructor(props){
         super(props); 
         
-        this.state = {value: props.value};
+        this.state = {
+            value: props.value,
+            id: props.id
+        };
+        
+        this.onOverallChange = props.onOverallChange;
         this.onInputChange = this.onInputChange.bind(this);
     }
     
     render() {
-        let { value } = this.state;
+        let { value, id } = this.state;
         
         return (
             <div className="input-container">
@@ -19,8 +24,9 @@ export class RegexInput extends React.Component {
     }
     
     onInputChange(e){
-        let self = e.target;
-        this.setState({term: self.value});
-        console.log('current state', this.state);
+        let value = e.target.value;
+        
+        this.setState({value});
+        this.onOverallChange(this.state.id, value);
     }
 }

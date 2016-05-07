@@ -6,6 +6,15 @@ export class RegexInputList extends React.Component {
         super(props)
         
         this.state = { inputs: props.inputs };
+        this.changeChunks = props.changeChunks;
+        this.createNewChunks = this.createNewChunks.bind(this);
+    }
+    
+    createNewChunks(id, text){
+        let { inputs } = this.state;
+        
+        inputs[id] = { id, text };
+        this.changeChunks(inputs);
     }
     
     render(){
@@ -14,9 +23,13 @@ export class RegexInputList extends React.Component {
         return (
             <ul>
                 {inputs.map(input => {
-                    return <RegexInput key={input.id} value={input.text} />
+                    return <RegexInput 
+                               onOverallChange={this.createNewChunks}
+                               key={input.id} 
+                               id={input.id} 
+                               value={input.text} 
+                           />
                 })}
-                <RegexInput value="" />
             </ul>    
         );
     }
