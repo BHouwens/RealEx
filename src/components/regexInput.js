@@ -16,11 +16,7 @@ export class RegexInput extends React.Component {
     render() {
         let { value, id } = this.state;
         
-        return (
-            <div className="input-container">
-                <input value={value} className="natural-lang" onChange={this.onInputChange}/>
-            </div>
-        );
+        return <input value={value} className="natural-lang" onChange={this.onInputChange}/>;
     }
     
     onInputChange(e){
