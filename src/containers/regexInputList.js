@@ -1,7 +1,8 @@
 import React from 'react';
-import { RegexInput } from './regexInput';
+import { connect } from 'react-redux';
+import { RegexInput } from '../components/regexInput';
 
-export class RegexInputList extends React.Component {
+class RegexInputList extends React.Component {
     constructor(props) {
         super(props)
 
@@ -34,3 +35,9 @@ export class RegexInputList extends React.Component {
         );
     }
 }
+
+function mapStateToProps(state){
+    return { inputs: state.chunks };
+}
+
+export const OutputRegexInputList = connect(mapStateToProps)(RegexInputList);
