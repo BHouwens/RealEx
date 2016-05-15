@@ -40,4 +40,4 @@ function mapStateToProps(state){
     return { inputs: state.chunks };
 }
 
-export const OutputRegexInputList = connect(mapStateToProps)(RegexInputList);
+export default connect(mapStateToProps)(RegexInputList);

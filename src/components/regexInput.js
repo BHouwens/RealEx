@@ -1,6 +1,6 @@
 import React from 'react';
 
-export class RegexInput extends React.Component {
+export default class RegexInput extends React.Component {
     constructor(props){
         super(props); 
         
