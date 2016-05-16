@@ -1,21 +1,9 @@
-import React from 'react';
-import { anyNumber } from '../utils/numberTrans';
-import { anyLetter } from '../utils/letterTrans';
+import { connect } from 'react-redux';
+import { OutputRegex } from '../components/outputRegex';
 
-function concatChunks(chunks){
-    return chunks.map(chunk => {
-                    if (chunk.text.indexOf('number') != -1) return anyNumber(chunk.text);
-                    if (chunk.text.indexOf('letter') != -1) return anyLetter(chunk.text);
-                    return chunk.text;
-                 }).join('');
+function mapStateToProps(state){
+    let { translatingList } = state;
+    return { inputs: translatingList.chunks };
 }
 
-export const TranslatedRegex = (props) => {
-    let {chunks} = props;
-    
-    return (
-      <div className='regex'>
-        {concatChunks(chunks)}
-      </div>  
-    );
-}
+export const TranslatedRegex = connect(mapStateToProps)(OutputRegex);

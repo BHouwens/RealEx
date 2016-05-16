@@ -2,15 +2,17 @@
 
 import { combineReducers } from 'redux';
 
-function regexReducer(){
-    return {
-            chunks: [
-                { id: 0, text: 'test' },
-                { id: 1, text: 'another' }
-            ]
-        };
+const initialState = {
+    chunks: [
+        { id: 0, text: 'any number' },
+        { id: 1, text: 'another' }
+    ]
+};
+
+function translatingList(state = initialState, action){
+    return state;
 }
 
-export default combineReducers({
-   chunks: regexReducer 
+export const rootReducer = combineReducers({
+   translatingList 
 });
