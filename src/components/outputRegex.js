@@ -1,6 +1,7 @@
 import React from 'react';
 import { anyNumber } from '../utils/numberTrans';
 import { anyLetter } from '../utils/letterTrans';
+import '../../styles/container__right.css';
 
 function concatChunks(chunks){
     return chunks.map(chunk => {
@@ -10,7 +11,10 @@ function concatChunks(chunks){
                  }).join('');
 }
 
-export const OutputRegex = (props) => {
-    let { inputs } = props;
-    return <div>{concatChunks(inputs)}</div>
+export const OutputRegex = ({ inputs }) => {
+    return (
+        <div className="container__right">
+            <div className="container__right__output">{concatChunks(inputs)}</div>
+        </div>
+    );
 }

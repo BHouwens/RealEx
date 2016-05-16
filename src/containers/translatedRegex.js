@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 import { OutputRegex } from '../components/outputRegex';
 
 function mapStateToProps(state){
-    let { translatingList } = state;
-    return { inputs: translatingList.chunks };
+    let { regexList } = state;
+    return { inputs: regexList.chunks };
 }
 
 export const TranslatedRegex = connect(mapStateToProps)(OutputRegex);

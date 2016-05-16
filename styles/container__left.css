@@ -1,0 +1,8 @@
+.container__left{
+    width: 0;
+    flex-grow: 1;
+    order: 1;
+    justify-content: center;
+    flex-direction: column;
+    background: #eaeaea;
+}

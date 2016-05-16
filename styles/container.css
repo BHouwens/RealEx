@@ -1,0 +1,6 @@
+@import "./main.css";
+
+.container{
+    display: flex;
+    flex-direction: row;
+}

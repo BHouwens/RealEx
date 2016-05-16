@@ -1,16 +1,19 @@
 import { connect } from 'react-redux';
-import { addDescription } from '../actions';
+import { changeDescription } from '../actions';
 import { RegexInputList } from '../components/regexInputList';
 
 function mapStateToProps(state){
-    let { translatingList } = state;
-    return { inputs: translatingList.chunks };
+    let { regexList } = state;
+    return { inputs: regexList.chunks };
 }
 
-function mapDispatchToProps(dispatch, ownProps){
+function mapDispatchToProps(dispatch){
     return {
-        onListItemChange: () => {
-            dispatch(changeDescription(ownProps.id, ownProps.text))
+        onListItemChange: (id, text) => {
+            dispatch(changeDescription(id, text))
+        },
+        onListTypeSelect: (id, type) => {
+            dispatch(changeType(id, type))
         }
     }
 }
