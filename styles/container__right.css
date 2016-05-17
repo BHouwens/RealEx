@@ -4,4 +4,9 @@
     order: 2;
     justify-content: center;
     flex-direction: column;
+    
+    .container__right__output{
+        text-align: center;
+        padding-top: 30px;
+    }
 }

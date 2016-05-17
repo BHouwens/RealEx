@@ -1,0 +1,24 @@
+.input-container {
+    list-style: none;
+    display: inline-block;
+    width: 100%;
+    
+    input{
+        border: none;
+        border-bottom: 2px solid gray;
+        padding: 10px;
+        font-size: responsive 11px 14px;
+        
+        &:focus{
+            outline: none;
+        }
+    }
+}
+
+select.null{
+   display: none;
+}
+
+input.null{
+    margin-left: 112px;
+}

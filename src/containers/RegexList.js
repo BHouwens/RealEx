@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { changeDescription } from '../actions';
+import { changeDescription, changeType } from '../actions';
 import { RegexInputList } from '../components/regexInputList';
 
 function mapStateToProps(state){

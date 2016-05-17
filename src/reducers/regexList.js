@@ -4,6 +4,11 @@ const initialState = {
             id: 0,
             text: '',
             type: null
+        },
+        {
+            id: 1,
+            text: 'any number',
+            type: 'then'
         }
     ]
 };
