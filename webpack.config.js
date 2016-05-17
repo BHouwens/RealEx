@@ -50,18 +50,16 @@ module.exports = {
   },
   postcss: function () {
     return [imports,
-      cssVars,
-      mixins,
-      colourFunctions,
-      nesting,
-      autoprefixer({ browsers: ['last 5 versions'] }),
-      rucksack({ fallbacks: true }),
-      mqPacker];
+            nesting,
+            cssVars,
+            mixins,
+            colourFunctions,
+            autoprefixer({ browsers: ['last 5 versions'] }),
+            rucksack({ fallbacks: true }),
+            mqPacker];
   },
   devServer: {
     inline: true,
     stats: { colors: true },
-  },
-
-
+  }
 };
