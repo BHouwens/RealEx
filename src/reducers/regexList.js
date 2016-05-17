@@ -3,18 +3,13 @@ const initialState = {
         {
             id: 0,
             text: '',
-            type: null
-        },
-        {
-            id: 1,
-            text: 'any number',
-            type: 'then'
+            type: 'starts-with',
+            amount: 'a'
         }
     ]
 };
 
 function regex(state = [], action) {
-    console.log(state);
     switch (action.type) {
         case 'CHANGE_DESCRIPTION':
             return state.chunks.map(chunk => {
@@ -22,7 +17,8 @@ function regex(state = [], action) {
                     return {
                         id: chunk.id,
                         text: action.text,
-                        type: chunk.type
+                        type: chunk.type,
+                        amount: chunk.amount
                     };
                 }
                 return chunk;
@@ -33,7 +29,20 @@ function regex(state = [], action) {
                     return {
                         id: chunk.id,
                         text: chunk.text,
-                        type: action.followType
+                        type: action.followType,
+                        amount: chunk.amount
+                    };
+                }
+                return chunk;
+            });
+        case 'CHANGE_AMOUNT':
+            return state.chunks.map(chunk => {
+                if (action.id == chunk.id) {
+                    return {
+                        id: chunk.id,
+                        text: chunk.text,
+                        type: chunk.type,
+                        amount: action.amount
                     };
                 }
                 return chunk;
@@ -53,6 +62,22 @@ export function regexList(state = initialState, action) {
             return Object.assign({}, state, {
                chunks: regex(state, action)
             });
+        case 'CHANGE_AMOUNT':
+            return Object.assign({}, state, {
+                chunks: regex(state, action) 
+            });
+        case 'ADD_CHUNK':
+            return Object.assign({}, state, {
+                        chunks: [
+                            ...state.chunks,
+                            {
+                                id: state.chunks[state.chunks.length - 1].id + 1,
+                                text: '',
+                                type: 'then',
+                                amount: 'a'
+                            }
+                        ]
+                    });
         default:
             return state;
     }

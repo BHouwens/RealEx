@@ -1,13 +1,12 @@
 import React from 'react';
-import { anyNumber } from '../utils/numberTrans';
-import { anyLetter } from '../utils/letterTrans';
+import Translator from '../utils/translator';
 import '../../styles/container__right.css';
+
+const translator = new Translator();
 
 function concatChunks(chunks){
     return chunks.map(chunk => {
-                    if (chunk.text.indexOf('number') != -1) return anyNumber(chunk.text);
-                    if (chunk.text.indexOf('letter') != -1) return anyLetter(chunk.text);
-                    return chunk.text;
+                    return translator.process(chunk.type, chunk.amount, chunk.text);
                  }).join('');
 }
 

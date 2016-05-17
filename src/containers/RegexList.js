@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { changeDescription, changeType } from '../actions';
+import { changeDescription, changeType, changeAmount, addChunk } from '../actions';
 import { RegexInputList } from '../components/regexInputList';
 
 function mapStateToProps(state){
@@ -14,6 +14,12 @@ function mapDispatchToProps(dispatch){
         },
         onListTypeSelect: (id, type) => {
             dispatch(changeType(id, type))
+        },
+        onAmountSelect: (id, amount) => {
+            dispatch(changeAmount(id, amount))  
+        },
+        onAddChunk: () => {
+            dispatch(addChunk())
         }
     }
 }
