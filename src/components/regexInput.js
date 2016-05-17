@@ -17,10 +17,10 @@ export const RegexInput = ({ value, id, type, amount, onChange, onTypeSelect, on
             </select>
             <select className="amount" defaultValue={amount} onChange={onAmountChange}>
                 <option value="a">a</option>
-                <option value="one-or-more">at least one</option>
+                <option value="one-or-more">one or more</option>
                 <option value="optionally-one">optionally one</option>
                 <option value="optionally-many">optionally many</option>
-                <option value="literally">literally</option>
+                <option value="literally">a literal</option>
             </select>
             <input value={value} className={styleClass + " natural-lang"} onChange={onChange}/>
         </li>

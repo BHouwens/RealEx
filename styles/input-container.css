@@ -1,13 +1,14 @@
 .input-container {
     list-style: none;
     display: inline-block;
-    width: 100%;
     
     input{
         border: none;
         border-bottom: 2px solid gray;
         padding: 10px;
         font-size: responsive 11px 14px;
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 400;
         
         &:focus{
             outline: none;

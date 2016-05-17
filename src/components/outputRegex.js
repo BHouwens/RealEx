@@ -10,6 +10,8 @@ function concatChunks(chunks){
     for (let i = 0; i < chunks.length; i++){
         let text = chunks[i].text;
         
+        console.log('text', text);
+        
         switch(chunks[i].type){
             case "followed":
                 text = '(?=' + text + ')';
@@ -22,13 +24,13 @@ function concatChunks(chunks){
                 break;
                 
             case "starts-with":
-                text = chunks[i].id == 0 ? '^' + text : text;
-                finalRegex.push(translator.process(chunks[i].amount, text));
+                text = translator.process(chunks[i].amount, text);
+                finalRegex.push(chunks[i].id == 0 ? '^' + text : text);
                 break;
                 
             case "ends-with":
-                text = chunks[i].id == chunks.length - 1 ? text + '$' : text;
-                finalRegex.push(translator.process(chunks[i].amount, text));
+                text = translator.process(chunks[i].amount, text);
+                finalRegex.push(chunks[i].id == chunks.length - 1 ? text + '$' : text);
                 break;
                 
             default:

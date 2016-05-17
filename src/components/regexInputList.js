@@ -6,6 +6,7 @@ import '../../styles/container__left.css';
 export const RegexInputList = ({ inputs, onListItemChange, onListTypeSelect, onAmountSelect, onAddChunk }) => {
     return (
         <div className="container__left">
+            <h1>I want to match text if it</h1>
             <ul>
                 {inputs.map(input =>
                     <RegexInput
