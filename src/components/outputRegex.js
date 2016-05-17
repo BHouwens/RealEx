@@ -5,9 +5,38 @@ import '../../styles/container__right.css';
 const translator = new Translator();
 
 function concatChunks(chunks){
-    return chunks.map(chunk => {
-                    return translator.process(chunk.type, chunk.amount, chunk.text);
-                 }).join('');
+    let finalRegex = [];
+    
+    for (let i = 0; i < chunks.length; i++){
+        let text = chunks[i].text;
+        
+        switch(chunks[i].type){
+            case "followed":
+                text = '(?=' + text + ')';
+                finalRegex.push(translator.process(chunks[i].amount, text));
+                break;
+                
+            case "not-followed":
+                text = '(?!' + text + ')';
+                finalRegex.push(translator.process(chunks[i].amount, text));
+                break;
+                
+            case "starts-with":
+                text = chunks[i].id == 0 ? '^' + text : text;
+                finalRegex.push(translator.process(chunks[i].amount, text));
+                break;
+                
+            case "ends-with":
+                text = chunks[i].id == chunks.length - 1 ? text + '$' : text;
+                finalRegex.push(translator.process(chunks[i].amount, text));
+                break;
+                
+            default:
+                finalRegex.push(translator.process(chunks[i].amount, text));
+        }
+    }
+    
+    return finalRegex.join('');
 }
 
 export const OutputRegex = ({ inputs }) => {

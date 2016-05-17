@@ -10,8 +10,8 @@ export const RegexInput = ({ value, id, type, amount, onChange, onTypeSelect, on
             <select className={styleClass} defaultValue={defaultVal} onChange={onTypeSelect}>
                 <option value="then">then</option>
                 <option value="or">or</option>
-                <option value="followed">followed by</option>
-                <option value="not-followed">not followed by</option>
+                <option value="followed">is followed by</option>
+                <option value="not-followed">is not followed by</option>
                 <option value="starts-with">starts with</option>
                 <option value="ends-with">ends with</option>
             </select>
@@ -20,6 +20,7 @@ export const RegexInput = ({ value, id, type, amount, onChange, onTypeSelect, on
                 <option value="one-or-more">at least one</option>
                 <option value="optionally-one">optionally one</option>
                 <option value="optionally-many">optionally many</option>
+                <option value="literally">literally</option>
             </select>
             <input value={value} className={styleClass + " natural-lang"} onChange={onChange}/>
         </li>
