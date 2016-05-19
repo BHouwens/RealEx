@@ -1,8 +1,6 @@
 import React from 'react';
-import Translator from '../utils/translator';
+import { translate } from '../utils/translator';
 import '../../styles/container__right.css';
-
-const translator = new Translator();
 
 function concatChunks(chunks){
     let finalRegex = [];
@@ -15,26 +13,26 @@ function concatChunks(chunks){
         switch(chunks[i].type){
             case "followed":
                 text = '(?=' + text + ')';
-                finalRegex.push(translator.process(chunks[i].amount, text));
+                finalRegex.push(translate(chunks[i].amount, text));
                 break;
                 
             case "not-followed":
                 text = '(?!' + text + ')';
-                finalRegex.push(translator.process(chunks[i].amount, text));
+                finalRegex.push(translate(chunks[i].amount, text));
                 break;
                 
             case "starts-with":
-                text = translator.process(chunks[i].amount, text);
+                text = translate(chunks[i].amount, text);
                 finalRegex.push(chunks[i].id == 0 ? '^' + text : text);
                 break;
                 
             case "ends-with":
-                text = translator.process(chunks[i].amount, text);
+                text = translate(chunks[i].amount, text);
                 finalRegex.push(chunks[i].id == chunks.length - 1 ? text + '$' : text);
                 break;
                 
             default:
-                finalRegex.push(translator.process(chunks[i].amount, text));
+                finalRegex.push(translate(chunks[i].amount, text));
         }
     }
     
