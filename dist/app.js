@@ -69,9 +69,14 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function configureStore() {
+	    var store = (0, _redux.createStore)(_reducers.rootReducer, window.devToolsExtension ? window.devToolsExtension() : undefined);
+	    return store;
+	}
+
 	(0, _reactDom.render)(_react2.default.createElement(
 	    _reactRedux.Provider,
-	    { store: (0, _redux.createStore)(_reducers.rootReducer) },
+	    { store: configureStore() },
 	    _react2.default.createElement(_app.App, null)
 	), document.querySelector('#app'));
 
@@ -22597,13 +22602,9 @@
 
 	var _translator = __webpack_require__(211);
 
-	var _translator2 = _interopRequireDefault(_translator);
-
 	__webpack_require__(212);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var translator = new _translator2.default();
 
 	function concatChunks(chunks) {
 	    var finalRegex = [];
@@ -22616,26 +22617,26 @@
 	        switch (chunks[i].type) {
 	            case "followed":
 	                text = '(?=' + text + ')';
-	                finalRegex.push(translator.process(chunks[i].amount, text));
+	                finalRegex.push((0, _translator.translate)(chunks[i].amount, text));
 	                break;
 
 	            case "not-followed":
 	                text = '(?!' + text + ')';
-	                finalRegex.push(translator.process(chunks[i].amount, text));
+	                finalRegex.push((0, _translator.translate)(chunks[i].amount, text));
 	                break;
 
 	            case "starts-with":
-	                text = translator.process(chunks[i].amount, text);
+	                text = (0, _translator.translate)(chunks[i].amount, text);
 	                finalRegex.push(chunks[i].id == 0 ? '^' + text : text);
 	                break;
 
 	            case "ends-with":
-	                text = translator.process(chunks[i].amount, text);
+	                text = (0, _translator.translate)(chunks[i].amount, text);
 	                finalRegex.push(chunks[i].id == chunks.length - 1 ? text + '$' : text);
 	                break;
 
 	            default:
-	                finalRegex.push(translator.process(chunks[i].amount, text));
+	                finalRegex.push((0, _translator.translate)(chunks[i].amount, text));
 	        }
 	    }
 
@@ -22665,87 +22666,57 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.translate = translate;
+	String.prototype.sortLetters = function () {
+	    return this.replace(/(capital|uppercase)\sletters?/i, '[A-Z]').replace(/(normal|lowercase)\sletters?/i, '[a-z]').replace(/letters?/i, '[a-zA-Z]');
+	};
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	String.prototype.sortNumbers = function () {
+	    return this.replace(/numbers?/i, '[0-9]');
+	};
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Translator = function () {
-	    function Translator() {
-	        _classCallCheck(this, Translator);
+	String.prototype.sortSpecialChars = function () {
+	    switch (this) {
+	        case 'fullstop':
+	            return '.';
+	        case 'period':
+	            return '.';
+	        case 'colon':
+	            return ':';
+	        case 'asterisk':
+	            return '*';
+	        case 'equals':
+	            return '=';
+	        case 'question mark':
+	            return '?';
+	        default:
+	            return this;
 	    }
+	};
 
-	    _createClass(Translator, [{
-	        key: 'sortLetters',
-	        value: function sortLetters(text) {
-	            text = text.replace(/(capital|uppercase)\sletters?/i, '[A-Z]');
-	            text = text.replace(/(normal|lowercase)\sletters?/i, '[a-z]');
-	            return text.replace(/letters?/i, '[a-zA-Z]');
+	String.prototype.sortAmount = function (amount) {
+	    if (amount == 'literally') {
+	        var match = /[\\\-\?\.\,\/\:\;\'\"\[\]\{\}|\*\=]/.test(this);
+	        return match ? '\\' + this : this;
+	    } else {
+	        switch (amount) {
+	            case 'one-or-more':
+	                return this + '+';
+	            case 'optionally-one':
+	                return this + '?';
+	            case 'optionally-many':
+	                return this + '*';
+	            default:
+	                return this;
 	        }
-	    }, {
-	        key: 'sortNumbers',
-	        value: function sortNumbers(text) {
-	            return text.replace(/numbers?/i, '[0-9]');
-	        }
-	    }, {
-	        key: 'sortSpecialChars',
-	        value: function sortSpecialChars(text) {
-	            console.log(text);
-	            switch (text) {
-	                case 'fullstop':
-	                    return '.';
-	                case 'period':
-	                    return '.';
-	                case 'colon':
-	                    return ':';
-	                case 'asterisk':
-	                    return '*';
-	                case 'equals':
-	                    return '=';
-	                case 'question mark':
-	                    return '?';
-	                default:
-	                    return text;
-	            }
-	        }
-	    }, {
-	        key: 'sortAmount',
-	        value: function sortAmount(amount, text) {
-	            if (amount == 'literally') {
-	                var match = /[\\\-\?\.\,\/\:\;\'\"\[\]\{\}|\*\=]/.test(text);
-	                return match ? '\\' + text : text;
-	            } else {
-	                switch (amount) {
-	                    case 'one-or-more':
-	                        return text + '+';
-	                    case 'optionally-one':
-	                        return text + '?';
-	                    case 'optionally-many':
-	                        return text + '*';
-	                    default:
-	                        return text;
-	                }
-	            }
-	        }
-	    }, {
-	        key: 'process',
-	        value: function process(amount, text) {
-	            if (text === undefined) return text;
+	    }
+	};
 
-	            text = this.sortSpecialChars(text);
-	            text = this.sortAmount(amount, text);
+	function translate(amount, text) {
+	    if (text === undefined) return text;
 
-	            text = this.sortLetters(text);
-	            text = this.sortNumbers(text);
-
-	            return text;
-	        }
-	    }]);
-
-	    return Translator;
-	}();
-
-	exports.default = Translator;
+	    return text.sortSpecialChars().sortAmount(amount).sortLetters().sortNumbers();
+	}
 
 /***/ },
 /* 212 */
