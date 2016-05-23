@@ -6,8 +6,15 @@ import { createStore } from 'redux';
 import { App } from './components/app';
 import { rootReducer } from './reducers';
 
+function configureStore() {
+    const store = createStore(rootReducer, 
+      window.devToolsExtension ? window.devToolsExtension() : undefined
+    );
+    return store;
+}
+
 renderToDom(
-    <Provider store={createStore(rootReducer)}>
+    <Provider store={configureStore()}>
         <App />
     </Provider>,
     document.querySelector('#app')
