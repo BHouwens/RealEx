@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import moment from 'moment';
 
 const firebase = require('firebase');
 
@@ -9,9 +9,14 @@ class HotCursor {
         this.internalRef = null;
         this.uuid = '';
         this.step = 0;
+        this.dev = false;
     }
 
-    /* Start HotCursor up. The config will be that provided by Firebase */
+    /*  Start HotCursor up. 
+        
+        config: Object - You can get this directly from Firebase
+        ref: string - The Firebase db child node to attach data to. Optional
+    */
     initialise(config, ref = null) {
         this.config = config;
 
@@ -40,7 +45,7 @@ class HotCursor {
     }
 
     sendMouseCoordinates(x, y) {
-        let timestamp = 'yes',
+        let timestamp = moment().format('MMM DD hh:mm:ss'),
             postObj = { timestamp, x, y },
             mouseCoordinateData = this.internalRef.child(this.uuid);
             
