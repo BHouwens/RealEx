@@ -8,8 +8,6 @@ function concatChunks(chunks){
     for (let i = 0; i < chunks.length; i++){
         let text = chunks[i].text;
         
-        console.log('text', text);
-        
         switch(chunks[i].type){
             case "followed":
                 text = '(?=' + text + ')';

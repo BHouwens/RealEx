@@ -4,7 +4,11 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
 import { App } from './components/app';
+import { hotCursor } from './utils/hotCursor';
+import { config } from './utils/config';
 import { rootReducer } from './reducers';
+
+hotCursor.initialise(config, 'RealEx');
 
 function configureStore() {
     const store = createStore(rootReducer, 

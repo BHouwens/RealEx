@@ -4,7 +4,8 @@
   "description": "Experiments in humane regular expressions",
   "main": "elm.js",
   "scripts": {
-    "start": "webpack-dev-server --port 3000"
+    "start": "webpack-dev-server --port 3000",
+    "build": "webpack -p"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,8 @@
     "css-loader": "^0.23.1",
     "css-mqpacker": "^5.0.1",
     "file-loader": "^0.8.5",
+    "firebase": "^3.0.3",
+    "moment": "^2.13.0",
     "postcss-colour-functions": "^1.5.1",
     "postcss-css-variables": "^0.5.1",
     "postcss-custom-media": "^5.0.1",
