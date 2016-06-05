@@ -12,11 +12,13 @@ class HotCursor {
         this.dev = false;
     }
 
-    /*  Start HotCursor up. 
-        
-        config: Object - You can get this directly from Firebase
-        ref: string - The Firebase db child node to attach data to. Optional
-    */
+    /**  
+     *  Starts HotCursor up. 
+     * 
+     *  config: Object - You can get this directly from Firebase
+     *  ref: string - The Firebase DB child node to attach data to. Optional
+     */
+    
     initialise(config, ref = null) {
         this.config = config;
 
@@ -26,6 +28,10 @@ class HotCursor {
         this.createUserSession(ref);
     }
 
+    /**
+     *  Creates a new session in the DB when a user begins 
+     */
+    
     createUserSession(passedRef) {
         this.uuid = 'user-' + this.generateUuid();
         this.internalRef = passedRef === null ? this.db.ref() : this.db.ref(passedRef);
@@ -33,6 +39,10 @@ class HotCursor {
         this.internalRef.child(this.uuid).set({});
     }
 
+    /** 
+     * Generates a UUID 
+     */
+    
     generateUuid() {
         function s4() {
             return Math.floor((1 + Math.random()) * 0x10000)
@@ -44,6 +54,10 @@ class HotCursor {
             s4() + '-' + s4() + s4() + s4();
     }
 
+    /** 
+     * Sends mouse coordinates and timestamp to the Firebase DB 
+     */
+    
     sendMouseCoordinates(x, y) {
         let timestamp = moment().format('MMM DD hh:mm:ss'),
             postObj = { timestamp, x, y },
@@ -51,6 +65,49 @@ class HotCursor {
             
         mouseCoordinateData.child(this.step).set(postObj);
         this.step += 1;
+    }
+    
+    /** 
+     * Logs all the UUIDs for the current project so they can
+     * be viewed or logged for data retrieval
+     */
+    
+    showAllSessionIDs(){
+        if (this.internalRef){
+            console.log('--------');
+            console.log('UUIDS FOR CURRENT PROJECT:');
+            console.log('--------');
+            
+            this.internalRef.once('value', snap => {
+               Object.keys(snap.val()).map(value => {
+                   console.log(value);
+               });
+               
+               console.log('--------');
+            });
+        }else{
+            throw new Error('You need to initialise hotCursor with a Firebase DB to fetch UUIDs');
+        }
+    }
+    
+    /**  
+     * Generate a heatmap of the data for the given UUID. If no UUID is given,
+     * it will use the data from the current user session 
+     */
+    
+    generateHeatMap(uuid = this.uuid){
+        if (uuid.indexOf('user-') == -1) uuid = 'user-' + uuid;
+        
+        if (this.internalRef.child(uuid)){
+            this.internalRef.child(uuid).once('value', snap => {
+                console.log(snap.val());
+            }); 
+        }else{
+            throw new Error(
+                `The UUID ${uuid} doesn't exist for the current project. 
+                 Make sure the UUID you've provided is correct`
+            );
+        }
     }
 }
 
