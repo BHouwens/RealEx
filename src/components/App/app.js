@@ -1,9 +1,9 @@
 import React from 'react';
-import { HotCursorMap } from './hotCursorMap';
-import { RegexList } from '../containers/RegexList';
-import { TranslatedRegex } from '../containers/TranslatedRegex';
+import { HotCursorMap } from '../HotCursorMap/hotCursorMap';
+import { RegexList } from '../../containers/RegexList';
+import { TranslatedRegex } from '../../containers/TranslatedRegex';
 
-import styles from '../../styles/container.css';
+import styles from './app.css';
 
 export class App extends React.Component {
     render(){

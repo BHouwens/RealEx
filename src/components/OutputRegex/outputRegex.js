@@ -1,6 +1,6 @@
 import React from 'react';
-import { translate } from '../utils/translator';
-import styles from '../../styles/container__right.css';
+import { translate } from '../../utils/translator';
+import styles from './outputRegex.css';
 
 function concatChunks(chunks){
     let finalRegex = [];

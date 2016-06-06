@@ -1,7 +1,7 @@
 import React from 'react';
-import { RegexInput } from '../components/regexInput';
-import { AddInputButton } from '../components/addInputButton';
-import styles from '../../styles/container__left.css';
+import { RegexInput } from '../RegexInput/regexInput';
+import { AddInputButton } from '../AddInputButton/addInputButton';
+import styles from './regexInputList.css';
 
 export const RegexInputList = ({ inputs, onListItemChange, onListTypeSelect, onAmountSelect, onAddChunk }) => {
     return (

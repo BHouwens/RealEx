@@ -1,7 +1,7 @@
 import React from 'react';
-import { hotCursor } from '../utils/hotCursor';
-import { config } from '../utils/config';
-import styles from '../../styles/hot-cursor.css';
+import { hotCursor } from '../../utils/hotCursor';
+import { config } from '../../utils/config';
+import styles from './HotCursorMap.css';
 
 export class HotCursorMap extends React.Component {
     

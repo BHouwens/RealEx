@@ -7,7 +7,7 @@
 }
 
 .button{
-    composes: button from './main.css';
+    composes: button from '../common.css';
     position: absolute;
     z-index: 2;
 }

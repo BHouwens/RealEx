@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { changeDescription, changeType, changeAmount, addChunk } from '../actions';
-import { RegexInputList } from '../components/regexInputList';
+import { RegexInputList } from '../components/RegexInputList/regexInputList';
 
 function mapStateToProps(state){
     let { regexList } = state;

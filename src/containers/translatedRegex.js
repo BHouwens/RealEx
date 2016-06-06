@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { OutputRegex } from '../components/outputRegex';
+import { OutputRegex } from '../components/OutputRegex/outputRegex';
 
 function mapStateToProps(state){
     let { regexList } = state;

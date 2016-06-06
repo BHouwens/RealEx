@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../styles/input-container.css';
+import styles from './regexInput.css';
 
 export const RegexInput = ({ value, id, type, amount, onChange, onTypeSelect, onAmountChange }) => {
     let defaultVal = !type ? 'Select' : type,
