@@ -29,6 +29,7 @@
     "css-mqpacker": "^5.0.1",
     "file-loader": "^0.8.5",
     "firebase": "^3.0.3",
+    "heatmap.js": "^2.0.2",
     "heatmapjs": "^2.0.2",
     "moment": "^2.13.0",
     "postcss-colour-functions": "^1.5.1",

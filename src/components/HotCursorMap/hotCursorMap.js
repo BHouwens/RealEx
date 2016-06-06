@@ -10,7 +10,9 @@ export class HotCursorMap extends React.Component {
         this.generateHeatMap = this.generateHeatMap.bind(this);
         
         this.state = {
-            classes: styles.overlay
+            overlayClasses: styles.overlay,
+            buttonClasses: styles.button,
+            bgClasses: styles.background
         };
         
         hotCursor.initialise(config, 'RealEx');
@@ -20,15 +22,23 @@ export class HotCursorMap extends React.Component {
     }
     
     generateHeatMap(){
-        this.setState({ classes: styles.overlay + ' ' + styles.visible });
-        // hotCursor.generateHeatMap();
+        let config = { container: document.querySelector('.' + styles.overlay), radius: 90 };
+        
+        this.setState({ 
+            overlayClasses: styles.overlay + ' ' + styles.visible,
+            buttonClasses: styles.button + ' ' + styles.hidden,
+            bgClasses: styles.background + ' ' + styles.visible
+         });
+        
+        hotCursor.generateHeatMap(config);
     }
     
     render(){
         return (
-          <div className={styles.container}>
-            <button className={styles.button} onClick={this.generateHeatMap}>Turn On Heatmap</button>
-            <div className={this.state.classes}></div>
+          <div>
+            <button className={this.state.buttonClasses} onClick={this.generateHeatMap}>Turn On Heatmap</button>
+            <div className={this.state.overlayClasses}></div>
+            <div className={this.state.bgClasses}></div>
           </div>  
         );
     }
