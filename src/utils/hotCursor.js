@@ -1,5 +1,4 @@
 import moment from 'moment';
-
 const firebase = require('firebase');
 
 class HotCursor {
@@ -9,14 +8,13 @@ class HotCursor {
         this.internalRef = null;
         this.uuid = '';
         this.step = 0;
-        this.dev = false;
     }
 
     /**  
      *  Starts HotCursor up. 
      * 
-     *  config: Object - You can get this directly from Firebase
-     *  ref: string - The Firebase DB child node to attach data to. Optional
+     *  @param {Object} config - You can get this directly from Firebase
+     *  @param {string} ref - The Firebase DB child node to attach data to. Optional
      */
     
     initialise(config, ref = null) {
@@ -29,7 +27,7 @@ class HotCursor {
     }
 
     /**
-     *  Creates a new session in the DB when a user begins 
+     *  Creates a new session in the DB when a user begins. Only called internally.
      */
     
     createUserSession(passedRef) {
@@ -40,7 +38,7 @@ class HotCursor {
     }
 
     /** 
-     * Generates a UUID 
+     *  Generates a UUID 
      */
     
     generateUuid() {
@@ -55,7 +53,7 @@ class HotCursor {
     }
 
     /** 
-     * Sends mouse coordinates and timestamp to the Firebase DB 
+     *  Sends mouse coordinates and timestamp to the Firebase DB
      */
     
     sendMouseCoordinates(x, y) {
@@ -68,11 +66,11 @@ class HotCursor {
     }
     
     /** 
-     * Logs all the UUIDs for the current project so they can
-     * be viewed or logged for data retrieval
+     *  Logs all the UUIDs for the current project so they can
+     *  be viewed or logged for data retrieval
      */
     
-    showAllSessionIDs(){
+    logAllSessionIDs(){
         if (this.internalRef){
             console.log('--------');
             console.log('UUIDS FOR CURRENT PROJECT:');
@@ -91,8 +89,8 @@ class HotCursor {
     }
     
     /**  
-     * Generate a heatmap of the data for the given UUID. If no UUID is given,
-     * it will use the data from the current user session 
+     *  Generate a heatmap of the data for the given UUID. If no UUID is given,
+     *  it will use the data from the current user session 
      */
     
     generateHeatMap(uuid = this.uuid){

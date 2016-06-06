@@ -3,15 +3,17 @@ import { HotCursorMap } from './hotCursorMap';
 import { RegexList } from '../containers/RegexList';
 import { TranslatedRegex } from '../containers/TranslatedRegex';
 
-import '../../styles/container.css';
+import styles from '../../styles/container.css';
 
 export class App extends React.Component {
     render(){
         return (
-            <div className="container">
+            <div>
                 <HotCursorMap />
-                <RegexList />
-                <TranslatedRegex />
+                <div className={styles.container}>
+                    <RegexList />
+                    <TranslatedRegex />
+                </div>
             </div>
         );
     }

@@ -1,12 +1,12 @@
 import React from 'react';
-import '../../styles/input-container.css';
+import styles from '../../styles/input-container.css';
 
 export const RegexInput = ({ value, id, type, amount, onChange, onTypeSelect, onAmountChange }) => {
     let defaultVal = !type ? 'Select' : type,
         styleClass = !type ? 'null' : type;
     
     return (
-        <li className="input-container">
+        <li className={styles.container}>
             <select className={styleClass} defaultValue={defaultVal} onChange={onTypeSelect}>
                 <option value="then">then</option>
                 <option value="or">or</option>

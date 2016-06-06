@@ -1,6 +1,6 @@
 import React from 'react';
 import { translate } from '../utils/translator';
-import '../../styles/container__right.css';
+import styles from '../../styles/container__right.css';
 
 function concatChunks(chunks){
     let finalRegex = [];
@@ -39,8 +39,8 @@ function concatChunks(chunks){
 
 export const OutputRegex = ({ inputs }) => {
     return (
-        <div className="container__right">
-            <div className="container__right__output">{concatChunks(inputs)}</div>
+        <div className={styles.container__right}>
+            <div className={styles.container__right__output}>{concatChunks(inputs)}</div>
         </div>
     );
 }

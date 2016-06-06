@@ -11,7 +11,8 @@ var autoprefixer = require('autoprefixer'),
 
 /*--------------------------------*/
 
-var path = require("path");
+var path = require("path"),
+    ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -27,7 +28,7 @@ module.exports = {
     loaders: [
       {
         test: /\.css$/,
-        loaders: ['style','css','postcss']
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader') 
       },
       {
         test: /\.jsx?$/,
@@ -58,6 +59,10 @@ module.exports = {
             rucksack({ fallbacks: true }),
             mqPacker];
   },
+  plugins: [
+    new ExtractTextPlugin('style.css', { allChunks: true })
+  ],
+  devtool: '#inline-source-map',
   devServer: {
     inline: true,
     stats: { colors: true },

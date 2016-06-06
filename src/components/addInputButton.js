@@ -1,6 +1,6 @@
 import React from 'react';
-import '../../styles/add-input-button.css';
+import styles from '../../styles/add-input-button.css';
 
 export const AddInputButton = ({ onClick }) => {
-    return <button onClick={onClick}>Add</button>
+    return <button className={styles.button} onClick={onClick}>Add</button>
 }
