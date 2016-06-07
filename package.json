@@ -44,7 +44,7 @@
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "rucksack-css": "^0.8.6",
-    "rxjs-es": "^5.0.0-beta.8",
+    "rx": "^4.1.0",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.0",

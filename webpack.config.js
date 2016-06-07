@@ -52,9 +52,9 @@ module.exports = {
   postcss: function () {
     return [imports,
             nesting,
+            colourFunctions,
             cssVars,
             mixins,
-            colourFunctions,
             autoprefixer({ browsers: ['last 5 versions'] }),
             rucksack({ fallbacks: true }),
             mqPacker];

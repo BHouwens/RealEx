@@ -1,9 +1,18 @@
 .button{
     composes: button from '../common.css';
+    margin: 0 auto;
+    display: block;
+}
+
+.button_container{
     position: absolute;
-    z-index: 3;
+    width: 100%;
+    padding: 10px 0;
+    bottom: 0;
     transition: 0.3s;
-    
+    background: darken(#4ECDC4, 30%);
+    z-index: 3;
+
     &.hidden{
         visibility: hidden;
         opacity: 0;

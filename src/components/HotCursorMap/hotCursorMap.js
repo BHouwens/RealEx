@@ -7,15 +7,16 @@ export class HotCursorMap extends React.Component {
     
     constructor(props){
         super(props);
+
         this.generateHeatMap = this.generateHeatMap.bind(this);
-        
         this.state = {
             overlayClasses: styles.overlay,
-            buttonClasses: styles.button,
+            buttonClasses: styles.button_container,
             bgClasses: styles.background
         };
         
         hotCursor.initialise(config, 'RealEx');
+
         window.addEventListener('mousemove', e => {
             hotCursor.sendMouseCoordinates(e.layerX, e.layerY);
         });
@@ -26,7 +27,7 @@ export class HotCursorMap extends React.Component {
         
         this.setState({ 
             overlayClasses: styles.overlay + ' ' + styles.visible,
-            buttonClasses: styles.button + ' ' + styles.hidden,
+            buttonClasses: styles.button_container + ' ' + styles.hidden,
             bgClasses: styles.background + ' ' + styles.visible
          });
         
@@ -36,7 +37,9 @@ export class HotCursorMap extends React.Component {
     render(){
         return (
           <div>
-            <button className={this.state.buttonClasses} onClick={this.generateHeatMap}>Turn On Heatmap</button>
+            <div className={this.state.buttonClasses}>
+                <button id="clicker" className={styles.button} onClick={this.generateHeatMap}>Turn On Heatmap</button>
+            </div>
             <div className={this.state.overlayClasses}></div>
             <div className={this.state.bgClasses}></div>
           </div>  

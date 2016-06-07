@@ -1,3 +1,8 @@
+:root{
+    --button: #4ECDC4;
+    --shadow-border: darken(#4ECDC4, 40%);
+}
+
 body{
     margin: 0;
     padding: 0;
@@ -18,7 +23,8 @@ body{
     font-weight: 400;
     color: white;
     transition: 0.3s;
-    background: #4ECDC4;
+    background: var(--button);
+    box-shadow: 0px 2px 0px 0px var(--shadow-border);
     
     &:hover{
         background: lighten(#4ecdc4, 15%);
