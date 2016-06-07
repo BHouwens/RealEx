@@ -10,7 +10,6 @@ class HotCursor {
         this.uuid = '';
         this.step = 0;
         this.heatmap = null;
-        this.scrollSubscription = null;
     }
 
 
@@ -73,9 +72,8 @@ class HotCursor {
 
     sendMouseCoordinates(x, y) {
         let timestamp = moment().format('MMM DD hh:mm:ss'),
-            type = 'move',
             scrollPosition = window.pageYOffset,
-            postObj = { timestamp, scrollPosition, type, x, y },
+            postObj = { timestamp, scrollPosition, x, y },
             dataRef = this.internalRef.child(this.uuid);
 
         dataRef.child(this.step).set(postObj);
