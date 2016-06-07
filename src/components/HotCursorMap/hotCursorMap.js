@@ -23,7 +23,7 @@ export class HotCursorMap extends React.Component {
     }
     
     generateHeatMap(){
-        let config = { container: document.querySelector('.' + styles.overlay), radius: 90 };
+        let config = { container: document.querySelector('.' + styles.overlay), radius: 50 };
         
         this.setState({ 
             overlayClasses: styles.overlay + ' ' + styles.visible,

@@ -122,7 +122,7 @@ class HotCursor {
                 mungedArray.push({
                     x: dataFromDatabase[entry].x,
                     y: dataFromDatabase[entry].y,
-                    value: 80
+                    value: 0.2
                 });
             }
         }
@@ -150,13 +150,16 @@ class HotCursor {
                 const dataFromDatabase = snap.val(),
                       heatmapData = this.mungeDatabaseData(dataFromDatabase);
 
-                let feed = Rx.Observable.from(heatmapData),
-                    listener = feed.subscribe(
-                        x => { console.log(x) }
+                let feed = Rx.Observable.from(heatmapData);
+                let listener = feed.subscribe(
+                        entry => { 
+                            this.heatmap.addData({ 
+                                  x: entry.x, 
+                                  y: entry.y, 
+                                  value: entry.value 
+                            });
+                        }
                     );
-
-                this.heatmap.setData
-                    ({ max: 2000, data: heatmapData });
             });
         } else {
             throw new Error(
