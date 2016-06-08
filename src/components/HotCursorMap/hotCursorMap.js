@@ -38,7 +38,7 @@ export class HotCursorMap extends React.Component {
         return (
           <div>
             <div className={this.state.buttonClasses}>
-                <button id="clicker" className={styles.button} onClick={this.generateHeatMap}>Turn On Heatmap</button>
+                <button id="clicker" className={styles.button} onClick={this.generateHeatMap}>Start Heatmap</button>
             </div>
             <div className={this.state.overlayClasses}></div>
             <div className={this.state.bgClasses}></div>

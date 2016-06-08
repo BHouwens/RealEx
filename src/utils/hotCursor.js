@@ -1,9 +1,10 @@
 import moment from 'moment';
 import * as Rx from 'rx';
 import * as h337 from 'heatmap.js';
-const firebase = require('firebase');
+import * as firebase from 'firebase';
 
 class HotCursor {
+
     constructor() {
         this.db = null;
         this.internalRef = null;
@@ -16,7 +17,7 @@ class HotCursor {
     /**  
      *  Starts HotCursor up. 
      * 
-     *  @param {Object} config - You can get this directly from Firebase
+     *  @param {Object} config - The web initialisation config directly from Firebase
      *  @param {string} ref - The Firebase DB child node to attach data to. 
      *                        Generally the project name. Optional
      */
@@ -73,10 +74,10 @@ class HotCursor {
     sendMouseCoordinates(x, y) {
         let timestamp = moment().format('MMM DD hh:mm:ss'),
             scrollPosition = window.pageYOffset,
-            postObj = { timestamp, scrollPosition, x, y },
-            dataRef = this.internalRef.child(this.uuid);
+            coordinateData = { timestamp, scrollPosition, x, y },
+            userData = this.internalRef.child(this.uuid);
 
-        dataRef.child(this.step).set(postObj);
+        userData.child(this.step).set(coordinateData);
         this.step += 1;
     }
 
@@ -148,8 +149,8 @@ class HotCursor {
                 const dataFromDatabase = snap.val(),
                       heatmapData = this.mungeDatabaseData(dataFromDatabase);
 
-                let feed = Rx.Observable.from(heatmapData);
-                let listener = feed.subscribe(
+                let dataFeed = Rx.Observable.from(heatmapData);
+                let listener = dataFeed.subscribe(
                         entry => { 
                             this.heatmap.addData({ 
                                   x: entry.x, 
