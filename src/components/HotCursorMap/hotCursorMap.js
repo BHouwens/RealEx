@@ -32,6 +32,9 @@ export class HotCursorMap extends React.Component {
          });
         
         hotCursor.generateHeatMap(config);
+        window.removeEventListener('mousemove', () => { 
+            console.log('Stopped listening for mouse movement');
+        });
     }
     
     render(){

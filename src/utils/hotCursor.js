@@ -6,11 +6,12 @@ import * as firebase from 'firebase';
 class HotCursor {
 
     constructor() {
-        this.db = null;
-        this.internalRef = null;
+        this.db;
+        this.heatmap;
+        this.currentProjectRef;
         this.uuid = '';
         this.step = 0;
-        this.heatmap = null;
+        this.lastRecordedTime = moment().format('MMM DD hh:mm:ss');
     }
 
 
@@ -38,9 +39,9 @@ class HotCursor {
 
     createUserSession(passedRef) {
         this.uuid = 'user-' + this.generateUuid();
-        this.internalRef = passedRef === null ? this.db.ref() : this.db.ref(passedRef);
+        this.currentProjectRef = passedRef === null ? this.db.ref() : this.db.ref(passedRef);
 
-        this.internalRef.child(this.uuid).set({
+        this.currentProjectRef.child(this.uuid).set({
             url: window.location.href,
             width: window.innerWidth,
             height: window.innerHeight
@@ -75,7 +76,7 @@ class HotCursor {
         let timestamp = moment().format('MMM DD hh:mm:ss'),
             scrollPosition = window.pageYOffset,
             coordinateData = { timestamp, scrollPosition, x, y },
-            userData = this.internalRef.child(this.uuid);
+            userData = this.currentProjectRef.child(this.uuid);
 
         userData.child(this.step).set(coordinateData);
         this.step += 1;
@@ -83,25 +84,35 @@ class HotCursor {
 
 
     /** 
-     *  Logs all the UUIDs for the current project so they can
-     *  be viewed or logged for data retrieval
+     *  Returns all the UUIDs for the passed project. If no project is passed
+     *  it will return the UUIDs for the current project
+     * 
+     *  @param {string} project - Project name to fetch UUIDs for. Optional
+     *  @param {boolean} logging - Whether to log the UUIDs to console for inspection
      */
 
-    logAllSessionIDs() {
-        if (this.internalRef) {
-            console.log('--------');
-            console.log('UUIDS FOR CURRENT PROJECT:');
-            console.log('--------');
+    getAllSessionIDs(project = null, logging = false) {
+        let uuids = [],
+            projectRef = project === null ? this.currentProjectRef : this.db.ref(project);
 
-            this.internalRef.once('value', snap => {
+        if (projectRef) {
+            if (logging){
+                console.log('--------');
+                console.log('UUIDS FOR PASSED PROJECT:');
+                console.log('--------');
+            }
+
+            this.currentProjectRef.once('value', snap => {
                 Object.keys(snap.val()).map(value => {
-                    console.log(value);
+                    if (logging) console.log(value);
+                    uuids.push(value);
                 });
 
-                console.log('--------');
+                if (logging) console.log('--------');
+                return uuids;
             });
         } else {
-            throw new Error('You need to initialise HotCursor with a Firebase DB to fetch UUIDs');
+            throw new Error(`There is no project ${project} in the Firebase database`);
         }
     }
 
@@ -119,14 +130,31 @@ class HotCursor {
         for (let entry in dataFromDatabase) {
             if (!isNaN(parseInt(entry))) {
                 mungedArray.push({
+                    value: 0.2,
                     x: dataFromDatabase[entry].x,
                     y: dataFromDatabase[entry].y,
-                    value: 0.2
+                    timestamp: dataFromDatabase[entry].timestamp
                 });
             }
         }
 
         return mungedArray;
+    }
+
+
+    /**
+     *  Create a delayed mapping of database entry for RxJS stream
+     * 
+     *  @param {Object} entry - Database entry to map delay from and munge
+     */
+
+    getDelayAndMap(entry) {
+        let { x, y, value } = entry,
+            delayInMilliseconds = moment(entry.timestamp).diff(this.lastRecordedTime),
+            delayedMapping = Rx.Observable.of({ x, y, value });
+
+        this.lastRecordedTime = entry.timestamp;
+        return delayInMilliseconds > 0 ? delayedMapping.delay(delayInMilliseconds) : delayedMapping;
     }
 
 
@@ -141,15 +169,18 @@ class HotCursor {
     generateHeatMap(config, uuid = this.uuid) {
         if (uuid.indexOf('user-') == -1) uuid = 'user-' + uuid;
 
-        if (this.internalRef.child(uuid)) {
+        if (this.currentProjectRef.child(uuid)) {
             this.heatmap = h337.create(config);
 
             /*- Asynchronous retrieval of Firebase data -*/
-            this.internalRef.child(uuid).once('value', snap => {
+            this.currentProjectRef.child(uuid).once('value', snap => {
                 const dataFromDatabase = snap.val(),
                       heatmapData = this.mungeDatabaseData(dataFromDatabase);
 
-                let dataFeed = Rx.Observable.from(heatmapData);
+                let dataFeed = Rx.Observable
+                                 .from(heatmapData)
+                                 .concatMap(entry => this.getDelayAndMap(entry));
+                
                 let listener = dataFeed.subscribe(
                         entry => { 
                             this.heatmap.addData({ 
@@ -157,6 +188,16 @@ class HotCursor {
                                   y: entry.y, 
                                   value: entry.value 
                             });
+                        },
+
+                        error => {
+                            throw new Error(
+                                `Error processing data from Firebase: ${error}`
+                            );
+                        },
+
+                        () => {
+                            return 'finished';
                         }
                     );
             });
