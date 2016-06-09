@@ -4,8 +4,8 @@ import { config } from '../../utils/config';
 import styles from './HotCursorMap.css';
 
 export class HotCursorMap extends React.Component {
-    
-    constructor(props){
+
+    constructor(props) {
         super(props);
 
         this.generateHeatMap = this.generateHeatMap.bind(this);
@@ -14,38 +14,37 @@ export class HotCursorMap extends React.Component {
             buttonClasses: styles.button_container,
             bgClasses: styles.background
         };
-        
-        hotCursor.initialise(config, 'RealEx');
 
-        window.addEventListener('mousemove', e => {
-            hotCursor.sendMouseCoordinates(e.layerX, e.layerY);
-        });
+        hotCursor.initialise(config, 'RealEx');
+        window.addEventListener('mousemove', this.sendMouseCoordinates, true);
     }
-    
-    generateHeatMap(){
+
+    sendMouseCoordinates(e){
+        hotCursor.sendMouseCoordinates(e.layerX, e.layerY);
+    }
+
+    generateHeatMap() {
         let config = { container: document.querySelector('.' + styles.overlay), radius: 50 };
-        
-        this.setState({ 
+
+        this.setState({
             overlayClasses: styles.overlay + ' ' + styles.visible,
             buttonClasses: styles.button_container + ' ' + styles.hidden,
             bgClasses: styles.background + ' ' + styles.visible
-         });
-        
-        hotCursor.generateHeatMap(config);
-        window.removeEventListener('mousemove', () => { 
-            console.log('Stopped listening for mouse movement');
         });
+
+        window.removeEventListener('mousemove', this.sendMouseCoordinates, true);
+        hotCursor.generateHeatMap(config);
     }
-    
-    render(){
+
+    render() {
         return (
-          <div>
-            <div className={this.state.buttonClasses}>
-                <button id="clicker" className={styles.button} onClick={this.generateHeatMap}>Start Heatmap</button>
+            <div>
+                <div className={this.state.buttonClasses}>
+                    <button id="clicker" className={styles.button} onClick={this.generateHeatMap}>Start Heatmap</button>
+                </div>
+                <div className={this.state.overlayClasses}></div>
+                <div className={this.state.bgClasses}></div>
             </div>
-            <div className={this.state.overlayClasses}></div>
-            <div className={this.state.bgClasses}></div>
-          </div>  
         );
     }
 }

@@ -151,10 +151,11 @@ class HotCursor {
     getDelayAndMap(entry) {
         let { x, y, value } = entry,
             delayInMilliseconds = moment(entry.timestamp).diff(this.lastRecordedTime),
-            delayedMapping = Rx.Observable.of({ x, y, value });
+            delayObservable = Rx.Observable.of({ x, y, value }),
+            finalDelayMapping = delayInMilliseconds > 0 ? delayObservable.delay(delayInMilliseconds) : delayObservable.delay(100);
 
         this.lastRecordedTime = entry.timestamp;
-        return delayInMilliseconds > 0 ? delayedMapping.delay(delayInMilliseconds) : delayedMapping;
+        return finalDelayMapping;
     }
 
 
@@ -197,7 +198,7 @@ class HotCursor {
                         },
 
                         () => {
-                            return 'finished';
+                            alert('Heatmap complete');
                         }
                     );
             });
