@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Rx from 'rx';
 import { hotCursor } from '../../utils/hotCursor';
 import { config } from '../../utils/config';
 import styles from './HotCursorMap.css';
@@ -19,9 +20,50 @@ export class HotCursorMap extends React.Component {
         window.addEventListener('mousemove', this.sendMouseCoordinates, true);
     }
 
-    sendMouseCoordinates(e){
+    /**
+     *  Send mouse coordinates via hotCursor
+     * 
+     *  @param {Event} e - Event triggered by mouse move
+     */
+
+    sendMouseCoordinates(e) {
         hotCursor.sendMouseCoordinates(e.layerX, e.layerY);
     }
+
+
+    /**
+     *  Subscribes to the data feed and pipes it to the heatmap
+     * 
+     *  @param {Rx.Observable} dataFeed - Data feed to subscribe to
+     */
+
+    subscribeAndGenerate(dataFeed) {
+        dataFeed.subscribe(
+            entry => {
+                hotCursor.heatmap.addData({
+                    x: entry.x,
+                    y: entry.y,
+                    value: entry.value
+                });
+            },
+
+            error => {
+                throw new Error(
+                    `Error processing subscription data 
+                     from Firebase: ${error}`
+                );
+            },
+
+            () => {
+                console.log('yes');
+            }
+        );
+    }
+
+
+    /**
+     *  Generates heatmap on button click. Removes event listener and 
+     */
 
     generateHeatMap() {
         let config = { container: document.querySelector('.' + styles.overlay), radius: 50 };
@@ -33,7 +75,10 @@ export class HotCursorMap extends React.Component {
         });
 
         window.removeEventListener('mousemove', this.sendMouseCoordinates, true);
-        hotCursor.generateHeatMap(config);
+
+        hotCursor.getHeatMapData(config)
+                 .then(data => hotCursor.createHeatMapDataFeed(data))
+                 .then(dataFeed => this.subscribeAndGenerate(dataFeed));
     }
 
     render() {

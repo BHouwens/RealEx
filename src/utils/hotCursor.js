@@ -152,7 +152,7 @@ class HotCursor {
         let { x, y, value } = entry,
             delayInMilliseconds = moment(entry.timestamp).diff(this.lastRecordedTime),
             delayObservable = Rx.Observable.of({ x, y, value }),
-            finalDelay = delayInMilliseconds > 0 ? delayInMilliseconds : 100;
+            finalDelay = delayInMilliseconds > 0 ? delayInMilliseconds : 100,
             finalDelayMapping = delayObservable.delay(finalDelay);
 
         this.lastRecordedTime = entry.timestamp;
@@ -160,50 +160,21 @@ class HotCursor {
     }
 
 
-    /**  
-     *  Generate a heatmap of the data for the given UUID. If no UUID is given,
-     *  it will use the data from the current user session 
+    /**
+     *  Gets heatmap data and returns a promise to generate with
      * 
      *  @param {Object} config - Heatmap.js config, consisting of container for heatmap and radius
      *  @param {string} uuid - UUID whose data will be used for heatmap generation. Optional
      */
 
-    generateHeatMap(config, uuid = this.uuid) {
+    getHeatMapData(config, uuid = this.uuid) {
         if (uuid.indexOf('user-') == -1) uuid = 'user-' + uuid;
 
         if (this.currentProjectRef.child(uuid)) {
+
             this.heatmap = h337.create(config);
+            return this.currentProjectRef.child(uuid).once('value');
 
-            /*- Asynchronous retrieval of Firebase data -*/
-            this.currentProjectRef.child(uuid)
-                .once('value')
-                .then(snap => {
-                    const dataFromDatabase = snap.val(),
-                        heatmapData = this.mungeDatabaseData(dataFromDatabase);
-
-                    let dataFeed = Rx.Observable
-                        .from(heatmapData)
-                        .concatMap(entry => this.getDelayAndMap(entry));
-
-                    let listener = dataFeed.subscribe(
-                        entry => {
-                            this.heatmap.addData({
-                                x: entry.x,
-                                y: entry.y,
-                                value: entry.value
-                            });
-                        },
-
-                        error => {
-                            throw new Error(
-                                `Error processing data from Firebase: ${error}`
-                            );
-                        }
-                    );
-                })
-                .then(() => {
-                    console.log('Heatmap finished');
-                });
         } else {
             throw new Error(
                 `The UUID ${uuid} doesn't exist for the current project. 
@@ -211,6 +182,22 @@ class HotCursor {
             );
         }
     }
+
+
+    /**
+     *  Creates an observable stream from heatmap data
+     * 
+     *  @param {Object} data - Data to create a source stream from
+     */
+
+     createHeatMapDataFeed(data) {
+        const dataFromDatabase = data.val(),
+              heatmapData = this.mungeDatabaseData(dataFromDatabase);
+
+        return Rx.Observable
+                 .from(heatmapData)
+                 .concatMap(entry => this.getDelayAndMap(entry));
+     }
 }
 
 export const hotCursor = new HotCursor();
