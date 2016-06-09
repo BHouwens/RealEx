@@ -96,7 +96,7 @@ class HotCursor {
             projectRef = project === null ? this.currentProjectRef : this.db.ref(project);
 
         if (projectRef) {
-            if (logging){
+            if (logging) {
                 console.log('--------');
                 console.log('UUIDS FOR PASSED PROJECT:');
                 console.log('--------');
@@ -152,7 +152,8 @@ class HotCursor {
         let { x, y, value } = entry,
             delayInMilliseconds = moment(entry.timestamp).diff(this.lastRecordedTime),
             delayObservable = Rx.Observable.of({ x, y, value }),
-            finalDelayMapping = delayInMilliseconds > 0 ? delayObservable.delay(delayInMilliseconds) : delayObservable.delay(100);
+            finalDelay = delayInMilliseconds > 0 ? delayInMilliseconds : 100;
+            finalDelayMapping = delayObservable.delay(finalDelay);
 
         this.lastRecordedTime = entry.timestamp;
         return finalDelayMapping;
@@ -174,20 +175,22 @@ class HotCursor {
             this.heatmap = h337.create(config);
 
             /*- Asynchronous retrieval of Firebase data -*/
-            this.currentProjectRef.child(uuid).once('value', snap => {
-                const dataFromDatabase = snap.val(),
-                      heatmapData = this.mungeDatabaseData(dataFromDatabase);
+            this.currentProjectRef.child(uuid)
+                .once('value')
+                .then(snap => {
+                    const dataFromDatabase = snap.val(),
+                        heatmapData = this.mungeDatabaseData(dataFromDatabase);
 
-                let dataFeed = Rx.Observable
-                                 .from(heatmapData)
-                                 .concatMap(entry => this.getDelayAndMap(entry));
-                
-                let listener = dataFeed.subscribe(
-                        entry => { 
-                            this.heatmap.addData({ 
-                                  x: entry.x, 
-                                  y: entry.y, 
-                                  value: entry.value 
+                    let dataFeed = Rx.Observable
+                        .from(heatmapData)
+                        .concatMap(entry => this.getDelayAndMap(entry));
+
+                    let listener = dataFeed.subscribe(
+                        entry => {
+                            this.heatmap.addData({
+                                x: entry.x,
+                                y: entry.y,
+                                value: entry.value
                             });
                         },
 
@@ -195,13 +198,12 @@ class HotCursor {
                             throw new Error(
                                 `Error processing data from Firebase: ${error}`
                             );
-                        },
-
-                        () => {
-                            alert('Heatmap complete');
                         }
                     );
-            });
+                })
+                .then(() => {
+                    console.log('Heatmap finished');
+                });
         } else {
             throw new Error(
                 `The UUID ${uuid} doesn't exist for the current project. 
