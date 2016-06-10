@@ -20,11 +20,6 @@ export class HotCursorMap extends React.Component {
         window.addEventListener('mousemove', this.sendMouseCoordinates, true);
     }
 
-    /**
-     *  Send mouse coordinates via hotCursor
-     * 
-     *  @param {Event} e - Event triggered by mouse move
-     */
 
     sendMouseCoordinates(e) {
         hotCursor.sendMouseCoordinates(e.layerX, e.layerY);
@@ -55,7 +50,7 @@ export class HotCursorMap extends React.Component {
             },
 
             () => {
-                console.log('yes');
+                console.log('Heatmap complete');
             }
         );
     }
@@ -76,9 +71,9 @@ export class HotCursorMap extends React.Component {
 
         window.removeEventListener('mousemove', this.sendMouseCoordinates, true);
 
-        hotCursor.getHeatMapData(config)
-                 .then(data => hotCursor.createHeatMapDataFeed(data))
-                 .then(dataFeed => this.subscribeAndGenerate(dataFeed));
+        hotCursor.getHeatMapData(config).then(dataFeed => {
+            this.subscribeAndGenerate(dataFeed);
+        });
     }
 
     render() {

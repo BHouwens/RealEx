@@ -173,7 +173,17 @@ class HotCursor {
         if (this.currentProjectRef.child(uuid)) {
 
             this.heatmap = h337.create(config);
-            return this.currentProjectRef.child(uuid).once('value');
+            return this.currentProjectRef
+                       .child(uuid)
+                       .once('value')
+                       .then(data => {
+                            const dataFromDatabase = data.val(),
+                                  heatmapData = this.mungeDatabaseData(dataFromDatabase);
+
+                            return Rx.Observable
+                                     .from(heatmapData)
+                                     .concatMap(entry => this.getDelayAndMap(entry));
+                        });
 
         } else {
             throw new Error(
@@ -182,22 +192,6 @@ class HotCursor {
             );
         }
     }
-
-
-    /**
-     *  Creates an observable stream from heatmap data
-     * 
-     *  @param {Object} data - Data to create a source stream from
-     */
-
-     createHeatMapDataFeed(data) {
-        const dataFromDatabase = data.val(),
-              heatmapData = this.mungeDatabaseData(dataFromDatabase);
-
-        return Rx.Observable
-                 .from(heatmapData)
-                 .concatMap(entry => this.getDelayAndMap(entry));
-     }
 }
 
 export const hotCursor = new HotCursor();
