@@ -11,6 +11,7 @@ class HotCursor {
         this.currentProjectRef;
         this.uuid = '';
         this.step = 0;
+        this.currentScrollPosition = 0;
         this.lastRecordedTime = moment().format('MMM DD hh:mm:ss');
     }
 
@@ -133,6 +134,7 @@ class HotCursor {
                     value: 0.2,
                     x: dataFromDatabase[entry].x,
                     y: dataFromDatabase[entry].y,
+                    scrollPosition: dataFromDatabase[entry].scrollPosition,
                     timestamp: dataFromDatabase[entry].timestamp
                 });
             }
@@ -149,9 +151,9 @@ class HotCursor {
      */
 
     getDelayAndMap(entry) {
-        let { x, y, value } = entry,
+        let { x, y, value, scrollPosition } = entry,
             delayInMilliseconds = moment(entry.timestamp).diff(this.lastRecordedTime),
-            delayObservable = Rx.Observable.of({ x, y, value }),
+            delayObservable = Rx.Observable.of({ x, y, value, scrollPosition }),
             finalDelay = delayInMilliseconds > 0 ? delayInMilliseconds : 100,
             finalDelayMapping = delayObservable.delay(finalDelay);
 
